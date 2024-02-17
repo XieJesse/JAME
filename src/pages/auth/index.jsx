@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { useGetUserInfo } from "../../hook/useGetUserInfo";
 
-const Auth = (force) => {
+const Auth = ({force}) => {
   const navigate = useNavigate();
   const { isAuth } = useGetUserInfo();
-  console.log(force);
+//   console.log(force);
 
   const signInWithGoogle = async () => {
     const results = await signInWithPopup(auth, provider);
@@ -31,17 +31,9 @@ const Auth = (force) => {
     }
   };
 
-  if (force === false) {
-    return <>
-    <div className="login-button">
-      <button className="login-with-google-btn" onClick={signInWithGoogle}>
-        Sign In With Google
-      </button>
-    </div>
-    </>
-  }
 
-  if (isAuth) {
+
+  if (isAuth && force == false) {
     return <>
       <button className="sign-out-button" onClick={signUserOut}>
         Sign Out
