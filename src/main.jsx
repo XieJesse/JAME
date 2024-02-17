@@ -6,15 +6,18 @@ import './index.css'
 import Auth from "./pages/auth/index" 
 import Map from "./pages/map/index" 
 import Layout from "./pages/Layout" 
+import Homepage from "./pages/homepage/index"
+import About from "./pages/about/index"
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index={true} element={<App />} />
+          <Route index={true} element={<Homepage />} />
           <Route path="/login" index={false} element={<Auth />} />
           <Route path="/map" index={false} element={<Map />} />
+          <Route path="/about" index={false} element={<About />} />
         </Route>
       </Routes>
     </BrowserRouter>
