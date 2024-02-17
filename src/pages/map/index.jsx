@@ -5,7 +5,7 @@ import { getDocs, getDoc, collection, addDoc, deleteDoc, doc, updateDoc } from '
 
 const Map = () => {
 
-  const [count, setCount] = useState(0) ;
+  const [selectedTime, setSelectedTime] = useState(new Date().getDate()) ;
 
   const [eventTitle, setEventTitle] = useState("") ;
   const [eventHost, setEventHost] = useState("") ;
@@ -38,6 +38,12 @@ const Map = () => {
   const [pinsList, setPinsList] = useState([]) ;
 
   const pinCollection = collection(db, "pins") ;
+
+  const deletePin = async(id) => {
+    await deleteDoc(doc(db, "pins", id)) ;
+    const newPinsList = pinsList.filter(pin => pin.id != id)
+    setPinsList(newPinsList)
+  }
 
   const getPins = async () => {
     try {
@@ -97,10 +103,12 @@ const Map = () => {
 
   useEffect(() => {
     getPins()
+    console.log(selectedTime)
   }, []) ;
 
   return (
     <div>
+      
       <div>
         {pinsList.map((pin) => (
           <div key={pin.id}>
@@ -120,7 +128,9 @@ const Map = () => {
                   }
                 </>
               ))}
+              <button onClick={() => deletePin(pin.id)}>Delete this pin</button>
 
+              <br/>
               <br/>
           </div>
         ))}
