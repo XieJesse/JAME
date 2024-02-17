@@ -43,8 +43,8 @@ const Auth = ({force}) => {
 
   return <>
   <div className="login-button">
-    <button className="login-with-google-btn" onClick={signInWithGoogle}>
-      Sign In With Google
+    <button className="login-with-google-btn font-semibold w-full text-black border border-2 rounded-lg border-black py-1 px-4 hover:bg-black hover:text-white duration-300 transition " onClick={signInWithGoogle}>
+      Sign In
     </button>
   </div>
   </>
