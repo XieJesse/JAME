@@ -7,6 +7,7 @@ import { useGetUserInfo } from "../../hook/useGetUserInfo";
 const Auth = (force) => {
   const navigate = useNavigate();
   const { isAuth } = useGetUserInfo();
+  console.log(force);
 
   const signInWithGoogle = async () => {
     const results = await signInWithPopup(auth, provider);
@@ -17,20 +18,20 @@ const Auth = (force) => {
       isAuth: true,
     };
     localStorage.setItem("auth", JSON.stringify(authInfo));
-    //navigate("/")
+    navigate("/map")
   }
 
   const signUserOut = async () => {
     try {
       await signOut(auth);
       localStorage.clear();
-      //navigate("/")
+      navigate("/")
     } catch {
       console.error(err);
     }
   };
 
-  if (force) {
+  if (force === false) {
     return <>
     <div className="login-button">
       <button className="login-with-google-btn" onClick={signInWithGoogle}>
