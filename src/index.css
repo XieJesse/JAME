@@ -54,3 +54,32 @@
   z-index: 9999;
 }
 
+.eventList {
+
+}
+
+.event {
+border-width: 2px;
+}
+
+.eventtime {
+  display: table-cell;
+  width: 5.5rem;
+  font-size: 90%;
+}
+
+.eventtitle {
+  display: table-cell;
+  color: #005A43;
+}
+
+.eventItem {
+ height: 0px;
+ overflow: hidden;
+ border: #005A43;
+ border-width: 2px;
+}
+
+.eventItem.active {
+height: fit-content;
+}
