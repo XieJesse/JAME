@@ -15,14 +15,17 @@ const Layout = () => {
 				</div>
 				<div>
 					<ul className="flex flex-row items-center justify-center gap-20 ">
-						<li className="text-sm font-bold text-slate-400 hover:text-black duration-300 transition decoration-2 underline-offset-4 hover:bg-neutral-100 rounded-2xl py-2 px-6 hover:drop-shadow-md">
+						{/* <li className="text-sm font-bold text-slate-400 hover:text-black duration-300 transition decoration-2 underline-offset-4 hover:bg-neutral-100 rounded-2xl py-2 px-6 hover:drop-shadow-md">
 							<Link to="/">Home</Link>
+						</li> */}
+						<li className="text-sm font-bold text-slate-400 hover:text-black duration-300 transition decoration-2 underline-offset-4 hover:bg-neutral-100 rounded-2xl py-2 px-6 hover:drop-shadow-md">
+							<Link to="/about">About</Link>
 						</li>
 						<li className="text-sm font-bold text-slate-400 hover:text-black duration-300 transition decoration-2 underline-offset-4 hover:bg-neutral-100 rounded-2xl py-2 px-6 hover:drop-shadow-md">
 							<Link to="/map">Map</Link>
 						</li>
 						<li className="text-sm font-bold text-slate-400 hover:text-black duration-300 transition decoration-2 underline-offset-4 hover:bg-neutral-100 rounded-2xl py-2 px-6 hover:drop-shadow-md">
-							<Link to="/about">About</Link>
+							<Link to="/list">List</Link>
 						</li>
 					</ul>
 				</div>
