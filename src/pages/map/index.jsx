@@ -39,9 +39,31 @@ const Map = () => {
     setEventTags(tagsList)
   }
 
-  const [pinsList, setPinsList] = useState([])
+	const [visibleTags, setVisibleTags] = useState([
+	  {
+	    field: 'Club Meeting',
+	    checked: true,
+	  },
+	  {
+	    field: 'Sporting Event',
+	    checked: true,
+	  },
+	  {
+	    field: 'Cultural Event',
+	    checked: true,
+	  },
+	])
 
-  const pinCollection = collection(db, 'pins')
+	const updateVisibleTags = (tag, isChecked) => {
+	  const tagsList = [...visibleTags]
+	  tagsList[tag].checked = isChecked
+	  setVisibleTags(tagsList)
+	}
+
+	const [pinsList, setPinsList] = useState([])
+	const [visiblePins, setVisiblePins] = useState(pinsList)
+
+	const pinCollection = collection(db, 'pins')
 
   const deletePin = async (id) => {
     await deleteDoc(doc(db, 'pins', id))
@@ -282,10 +304,22 @@ const Map = () => {
         />
       </div>
       <br />
-
+			{visibleTags.map((tag, index) => (
+			  <div key={tag.field}>
+			    <label>
+			      <span>{tag.field}</span>
+			      <input key={index} type="checkbox" checked={tag.checked} onChange={() => {
+							console.log("a")
+			        updateVisibleTags(index, !tag.checked) ;
+			        setVisiblePins(pinsList.filter((pin) => ([...pin.tags][0].checked && [...visibleTags][0].checked) || ([...pin.tags][1].checked && [...visibleTags][1].checked) || ([...pin.tags][2].checked && [...visibleTags][2].checked))) ;
+			      }}/>
+			    </label>
+			  </div>
+			))}
+			<br />
       {/* Won't be needing this, this generates a list of all the events like b-engaged does. maybe we can take this out into its own page */}
       <div className='popup'>
-        {pinsList.map(
+        {visiblePins.map(
           (pin) =>
             selectedDate.getTime() >= new Date(pin.start).getTime() &&
             selectedDate.getTime() <= new Date(pin.end).getTime() && (
@@ -345,7 +379,7 @@ const Map = () => {
         <div className="div" style={{ position: 'absolute', top: '18%', width: "100%", height: '82vh' }}>
           {/* Sidebar */}
           <div className={showNav ? 'sidenav active' : 'sidenav'}>
-          <button style={{position: 'absolute', zIndex: '9999', right: '0px', top: '0px', padding: '20px'}} onClick={() => setShowNav(!showNav)}>X</button>
+          <button style={{position: 'absolute', zIndex: '2', right: '0px', top: '0px', padding: '20px'}} onClick={() => setShowNav(!showNav)}>X</button>
           {selectedPin != null ? (
             <div key={selectedPin.id}>
                 {isAuth &&
@@ -373,7 +407,7 @@ const Map = () => {
           </div>
           {/* Add Pin BTN */}
           <button style={{position: 'absolute', zIndex: '9999', right: '80px', top: '20px'}} onClick={() => setShowPop(!showPop)}>ADD PIN</button>
-          <div style={{ height: '100vh', width: '100%'}}>
+          <div className="mt-40" style={{ height: '100vh', width: '100%'}}>
             {isLoaded ? (
               <GoogleMap center={{ lat: 42.088565, lng: -75.968623 }} zoom={16.5} onClick={onMapClick} mapContainerStyle={{ width: '100%', height: '90vh' }}>
                 {pinsList.map(
