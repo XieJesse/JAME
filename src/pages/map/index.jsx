@@ -1,10 +1,13 @@
 import { Fragment, React } from 'react'
 import { useEffect, useState } from 'react'
 import { db, auth } from '../../config/firebase'
-import { getDocs, getDoc, collection, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore'
+import { getDocs, getDoc, collection, addDoc, deleteDoc, doc, updateDoc, setDoc } from 'firebase/firestore'
 import { GoogleMap, InfoWindowF, MarkerF, useLoadScript } from '@react-google-maps/api'
+import { useGetUserInfo } from "../../hook/useGetUserInfo";
 
 const Map = () => {
+	const { name, profilePhoto, userID, isAuth } = useGetUserInfo();
+
 	const [selectedDate, setSelectedDate] = useState(new Date())
 	const [selectedTime, setSelectedTime] = useState(new Date().getHours() * 60 + new Date().getMinutes())
 
@@ -115,8 +118,57 @@ const Map = () => {
 		}
 	}
 
+	const userCollection = collection(db, "users") ;
+
+	const [favoritePins, setFavoritePins] = useState([]) ;
+
+	const addUser = async(id) => {
+		console.log(id) ;
+    // e.preventDefault()
+    try {
+      await setDoc(doc(db,"users",id), {
+        favorites : [],
+      }) ;
+			console.log("favoritePins") ;
+    } catch (error) {
+      console.log(error) ;
+    }
+
+  }
+
+  const getFavoritePins = async(id) => {
+    try {
+      const user = await getDoc(doc(db,"users",id)) ;
+      if (user.exists()) {
+        setFavoritePins(user.data().favorites) ;
+				// console.log(favoritePins) ;
+      }
+      else {
+        addUser(id) ;
+      }
+    } catch (error) {
+      console.log(error) ;
+    }
+  }
+
+  const updateFavoritePins = async(id,pinId) => {
+		console.log(favoritePins) ;
+		const index = favoritePins.toString().indexOf(pinId) ;
+		if (favoritePins.toString().indexOf(pinId) > -1) {
+			// console.log(favoritePins) ; // existing, remove
+			console.log(pinId) ; // existing, remove
+			setFavoritePins(favoritePins.filter((pin) => pin != pinId)) ;
+		} else {
+			console.log(pinId) ; // not existing, add
+			setFavoritePins([pinId].concat(favoritePins)) ;
+		}
+    await updateDoc(doc(db, "users", id), {favorites : favoritePins}) ;
+  }
+
 	useEffect(() => {
-		getPins()
+		getPins() ;
+		getFavoritePins(userID) ;
+		console.log(userID) ;
 		// console.log("selected date: " + selectedDate.toLocaleString("en-GB").substring(6,10)+"-"+selectedDate.toLocaleString("en-GB").substring(3,5)+"-"+selectedDate.toLocaleString("en-GB").substring(0,2))
 	}, [])
 
@@ -230,6 +282,10 @@ const Map = () => {
 						selectedDate.getTime() >= new Date(pin.start).getTime() &&
 						selectedDate.getTime() <= new Date(pin.end).getTime() && (
 							<div key={pin.id}>
+								{isAuth &&
+									<button onClick={() => updateFavoritePins(userID,pin.id)}>Favorite this pin</button>
+								}
+								<h1> id: {pin.id} </h1>
 								<h1> title: {pin.title} </h1>
 								<p> host: {pin.host} </p>
 								<p> start: {pin.start} </p>
