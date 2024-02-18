@@ -18,9 +18,6 @@ const Chatbot = () => {
 					...doc.data(),
 				}))
 			)
-			// console.log(pinsList)
-			// console.log("dasdad") ;
-			// update pins list from database
 		} catch (error) {
 			console.log(error)
 		}

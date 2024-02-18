@@ -4,6 +4,8 @@ import { db, auth } from '../../config/firebase'
 import { getDocs, getDoc, collection, addDoc, deleteDoc, doc, updateDoc, setDoc } from 'firebase/firestore'
 import { GoogleMap, InfoWindowF, MarkerF, useLoadScript } from '@react-google-maps/api'
 import { useGetUserInfo } from '../../hook/useGetUserInfo'
+import Chatbot from '../chatbot/index.jsx'
+import green_marker from '../../assets/green_marker.png'
 
 const Map = () => {
 	const { name, profilePhoto, userID, isAuth } = useGetUserInfo()
@@ -193,17 +195,19 @@ const Map = () => {
 	}
 
 	const updateFavoritePins = async (id, pinId) => {
-		console.log(favoritePins)
+		// console.log(favoritePins)
 		const index = favoritePins.toString().indexOf(pinId)
 		if (favoritePins.toString().indexOf(pinId) > -1) {
-			// console.log(favoritePins) ; // existing, remove
 			console.log(pinId) // existing, remove
-			setFavoritePins(favoritePins.filter((pin) => pin != pinId))
+			const newFavorites = favoritePins.filter((pin) => pin != pinId)
+			setFavoritePins(newFavorites)
+			await updateDoc(doc(db, 'users', id), { favorites: newFavorites })
 		} else {
 			console.log(pinId) // not existing, add
-			setFavoritePins([pinId].concat(favoritePins))
+			const newFavorites = [pinId].concat(favoritePins)
+			setFavoritePins(newFavorites)
+			await updateDoc(doc(db, 'users', id), { favorites: newFavorites })
 		}
-		await updateDoc(doc(db, 'users', id), { favorites: favoritePins })
 	}
 
 	useEffect(() => {
@@ -291,35 +295,6 @@ const Map = () => {
 				)}
 			</div> */}
 
-			{/* Filters */}
-			<p className="mt-100">a</p>
-			{visibleTags.map((tag, index) => (
-				<div className="z-20" key={tag.field}>
-					<label>
-						<span>{tag.field}</span>
-						<input
-							key={index}
-							type="checkbox"
-							checked={tag.checked}
-							onChange={() => {
-								console.log('a')
-								updateVisibleTags(index, !tag.checked)
-								setVisiblePins(
-									pinsList.filter(
-										(pin) =>
-											([...pin.tags][0].checked && [...visibleTags][0].checked) ||
-											([...pin.tags][1].checked && [...visibleTags][1].checked) ||
-											([...pin.tags][2].checked && [...visibleTags][2].checked)
-									)
-								)
-								// console.log(pinsList)
-								// console.log(visiblePins)
-							}}
-						/>
-					</label>
-				</div>
-			))}
-
 			{/* Slider keep this */}
 			<div className="slidecontainer">
 				<input
@@ -365,9 +340,34 @@ const Map = () => {
 					}}
 				/>
 			</div>
-			<br />
 
-			<br />
+			{/* Filters */}
+			{visibleTags.map((tag, index) => (
+				<div className="z-20" key={tag.field}>
+					<label>
+						<span>{tag.field}</span>
+						<input
+							key={index}
+							type="checkbox"
+							checked={tag.checked}
+							onChange={() => {
+								console.log('a')
+								updateVisibleTags(index, !tag.checked)
+								setVisiblePins(
+									pinsList.filter(
+										(pin) =>
+											([...pin.tags][0].checked && [...visibleTags][0].checked) ||
+											([...pin.tags][1].checked && [...visibleTags][1].checked) ||
+											([...pin.tags][2].checked && [...visibleTags][2].checked)
+									)
+								)
+								// console.log(pinsList)
+								// console.log(visiblePins)
+							}}
+						/>
+					</label>
+				</div>
+			))}
 
 			{/* Deprecated Popup */}
 			{/* <div className="popup">
@@ -399,6 +399,9 @@ const Map = () => {
 				)}
 			</div> */}
 
+			{/* Chatbot */}
+			<Chatbot />
+
 			{/* Map */}
 			<Fragment>
 				{/* Put this into a new dialog box */}
@@ -428,7 +431,7 @@ const Map = () => {
 						</form>
 					</div>
 				</div>
-				<div className="div" style={{ position: 'absolute', top: '25%', width: '100%', height: '82vh' }}>
+				<div className="div" style={{ position: 'absolute', top: '30%', width: '100%', height: '82vh' }}>
 					{/* Sidebar */}
 					<div className={showNav ? 'sidenav active' : 'sidenav'}>
 						<button style={{ position: 'absolute', zIndex: '2', right: '0px', top: '0px', padding: '20px' }} onClick={() => setShowNav(!showNav)}>
@@ -462,7 +465,7 @@ const Map = () => {
 						ADD PIN
 					</button>
 
-					<div className="mt-40" style={{ height: '100vh', width: '100%' }}>
+					<div style={{ width: '100%' }}>
 						{isLoaded ? (
 							<GoogleMap center={{ lat: 42.088565, lng: -75.968623 }} zoom={16.5} onClick={onMapClick} mapContainerStyle={{ width: '100%', height: '90vh' }}>
 								{visiblePins.map(
@@ -476,9 +479,14 @@ const Map = () => {
 													lng: parseFloat(coordinates.split(' ')[1]),
 												}}
 												onClick={() => handleActiveMarker(id)}
+												// icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}
+												icon={{
+													url: green_marker,
+													scaledSize: { width: 30, height: 50 },
+												}}
 												// icon={{
-												//   url:"https://t4.ftcdn.net/jpg/02/85/33/21/360_F_285332150_qyJdRevcRDaqVluZrUp8ee4H2KezU9CA.jpg",
-												//   scaledSize: { width: 50, height: 50 }
+												// 	url: 'https://t4.ftcdn.net/jpg/02/85/33/21/360_F_285332150_qyJdRevcRDaqVluZrUp8ee4H2KezU9CA.jpg',
+												// 	scaledSize: { width: 50, height: 50 },
 												// }}
 											>
 												{activeMarker === id ? (
