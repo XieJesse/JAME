@@ -376,12 +376,14 @@ const Map = () => {
 									// console.log('filter checked')
 									updateVisibleTags(index, !tag.checked)
 									setVisiblePins(
-										pinsList.filter(
-											(pin) =>
-												([...pin.tags][0].checked && [...visibleTags][0].checked) ||
-												([...pin.tags][1].checked && [...visibleTags][1].checked) ||
-												([...pin.tags][2].checked && [...visibleTags][2].checked)
-										)
+									  pinsList.filter(
+									    (pin) =>(
+									      (([...pin.tags][0].checked && [...visibleTags][1].checked) ||
+									      ([...pin.tags][1].checked && [...visibleTags][2].checked) ||
+									      ([...pin.tags][2].checked && [...visibleTags][3].checked)) &&
+									      ([...visibleTags][0].checked ? (favoritePins.toString().indexOf(pin.id) > -1) : true
+									    ))
+									  )
 									)
 									// console.log(pinsList)
 									// console.log(visiblePins)
