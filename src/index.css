@@ -14,7 +14,43 @@
 	background-color: white;
 	scroll-behavior: smooth;
 }
-/* 
-* {
+
+/* * {
   border: 1px solid red;
-} */
+  
+}  */
+
+.sidenav {
+  width: 400px;
+  background: #015a32;
+  position: absolute;
+  height: 95vh;
+  padding: 0 30px;
+  left: -100%;
+  transition: all 1s;
+}
+
+.sidenav.active {
+  left: 0;
+  z-index: 9999;
+}
+
+.popup {
+  width: 400px;
+  background: #015a32;
+  position: absolute;
+  height: 350px;
+  padding: 30px;
+  transition: all 0.5s;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -9999;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.popup.active {
+  z-index: 9999;
+}
+
