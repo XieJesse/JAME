@@ -77,7 +77,7 @@ const TestMap = () => {
         ...doc.data(),
       })))
       console.log(pinsList) ;
-      console.log("dasdad") ;
+      // console.log("dasdad") ;
       // update pins list from database
     } catch (error) {
       console.log(error) ;
@@ -128,10 +128,11 @@ const TestMap = () => {
   useEffect(() => {
     getPins()
     console.log(selectedTime)
+    console.log(pinsList)
   }, []) ;
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyA4y9G2-HeBtrxVlOFjcg3gu8ucgvy07H8",
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY ,
   });
 
   const [activeMarker, setActiveMarker] = useState(null);
@@ -143,8 +144,22 @@ const TestMap = () => {
     setActiveMarker(marker);
   };
 
+  // const [clickMarkers, setClickMarkers] = useState([]);
 
-
+  const onMapClick = (e) => {
+    // console.log(e)
+    setActiveMarker(null)
+    // setClickMarkers((current) => [
+    //   ...current,
+    //   {
+    //     lat: e.latLng.lat(),
+    //     lng: e.latLng.lng()
+    //   }
+    // ]);
+    // setEventCoordinates("" + e.latLng.lat() + " " + e.latLng.lng())
+    navigator.clipboard.writeText("" + e.latLng.lat() + " " + e.latLng.lng())
+    console.log(clickMarkers)
+  };
 
   return (
     <div>
@@ -208,13 +223,19 @@ const TestMap = () => {
             <GoogleMap
               center={{ lat: 42.088565, lng: -75.968623 }}
               zoom={16.5}
-              onClick={() => setActiveMarker(null)}
+              onClick={
+                onMapClick
+              }
               mapContainerStyle={{ width: "100%", height: "90vh" }}
             >
-              {markers.map(({ id, name, position }) => (
+              {pinsList.map(({ id, host, coordinates, description }) => (
                 <MarkerF
                   key={id}
-                  position={position}
+                  position={{
+                    lat: parseFloat(coordinates.split(" ")[0]),
+                    lng: parseFloat(coordinates.split(" ")[1])
+                  }
+                  }
                   onClick={() => handleActiveMarker(id)}
                   // icon={{
                   //   url:"https://t4.ftcdn.net/jpg/02/85/33/21/360_F_285332150_qyJdRevcRDaqVluZrUp8ee4H2KezU9CA.jpg",
@@ -224,8 +245,8 @@ const TestMap = () => {
                   {activeMarker === id ? (
                     <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
                       <div>
-                        <p>{name}</p>
-                        <p>hi</p>
+                        <p>{host}</p>
+                        <p>{description}</p>
                       </div>
                     </InfoWindowF>
                   ) : null}
