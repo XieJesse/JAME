@@ -47,6 +47,10 @@ const Map = () => {
 
 	const [visibleTags, setVisibleTags] = useState([
 		{
+		  field: 'Favorites',
+		  checked: false,
+		},
+		{
 			field: 'Club Meeting',
 			checked: true,
 		},
