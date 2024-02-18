@@ -102,12 +102,16 @@ const Chatbot = () => {
 	return (
 		<div>
 			<form onSubmit={handleSendMessage}>
-				<input type="text" value={input} placeholder="input goes here" onChange={(e) => setInput(e.target.value)}></input>
-				<input type="submit" />
-				{isWaiting ? <BeatLoader /> : null}
+				<input className="p-4 rounded-full border border-black" type="text" value={input} placeholder="✨ Smart Search" onChange={(e) => setInput(e.target.value)}></input>
+				<input type="submit" className="hidden" />
 			</form>
 			{/* {messages.length > 0 && messages[messages.length - 1].isUser == false ? <p>{messages[messages.length - 1].content}</p> : null} */}
-			{lastMessage != '' ? <p>{lastMessage}</p> : null}
+			{isWaiting ? <BeatLoader /> : null}
+			{lastMessage != '' ? (
+				<div className="px-2 py-4 rounded-full border border-black w-1/2">
+					<p>{lastMessage}</p>{' '}
+				</div>
+			) : null}
 		</div>
 	)
 }

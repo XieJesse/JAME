@@ -6,6 +6,10 @@ import { GoogleMap, InfoWindowF, MarkerF, useLoadScript } from '@react-google-ma
 import { useGetUserInfo } from '../../hook/useGetUserInfo'
 import Chatbot from '../chatbot/index.jsx'
 import green_marker from '../../assets/green_marker.png'
+import { HiOutlineLocationMarker } from 'react-icons/hi'
+import { IoIosCloseCircleOutline } from 'react-icons/io'
+import { GoStar, GoStarFill } from 'react-icons/go'
+import { FaTrashAlt } from 'react-icons/fa'
 
 const Map = () => {
 	const { name, profilePhoto, userID, isAuth } = useGetUserInfo()
@@ -296,10 +300,13 @@ const Map = () => {
 			</div> */}
 
 			{/* Slider keep this */}
-			<div className="slidecontainer">
+			<div
+				className="slidecontainer w-full flex flex-col justify-center align-center items-center"
+				// style={{ background: '#206e3c' }}
+			>
 				<input
 					type="range"
-					style={{ width: '570px' }}
+					className="w-1/2 text-center h-12"
 					min="0"
 					max="1439"
 					value={selectedTime}
@@ -309,22 +316,22 @@ const Map = () => {
 						// console.log(selectedDate.toLocaleString("en-GB").substring(6,10)+"-"+selectedDate.toLocaleString("en-GB").substring(3,5)+"-"+selectedDate.toLocaleString("en-GB").substring(0,2))
 					}}
 				/>
-				{parseInt(selectedTime / 60) == 0 && <p> Selected Time: 12:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} AM</p>}
+				{parseInt(selectedTime / 60) == 0 && <p> 12:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} AM</p>}
 				{parseInt(selectedTime / 60) < 12 && parseInt(selectedTime / 60) > 0 && (
 					<p>
 						{' '}
-						Selected Time: {parseInt(selectedTime / 60)}:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} AM
+						{parseInt(selectedTime / 60)}:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} AM
 					</p>
 				)}
-				{parseInt(selectedTime / 60) == 12 && <p> Selected Time: 12:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} PM</p>}
+				{parseInt(selectedTime / 60) == 12 && <p> 12:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} PM</p>}
 				{parseInt(selectedTime / 60) > 12 && (
 					<p>
 						{' '}
-						Selected Time: {parseInt(selectedTime / 60) % 12}:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} PM
+						{parseInt(selectedTime / 60) % 12}:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} PM
 					</p>
 				)}
 			</div>
-			<div className="calendarcontainer">
+			<div className="calendarcontainer w-full flex flex-col justify-center align-center items-center">
 				<input
 					type="date"
 					id="start"
@@ -342,32 +349,44 @@ const Map = () => {
 			</div>
 
 			{/* Filters */}
-			{visibleTags.map((tag, index) => (
-				<div className="z-20" key={tag.field}>
-					<label>
-						<span>{tag.field}</span>
-						<input
-							key={index}
-							type="checkbox"
-							checked={tag.checked}
-							onChange={() => {
-								console.log('a')
-								updateVisibleTags(index, !tag.checked)
-								setVisiblePins(
-									pinsList.filter(
-										(pin) =>
-											([...pin.tags][0].checked && [...visibleTags][0].checked) ||
-											([...pin.tags][1].checked && [...visibleTags][1].checked) ||
-											([...pin.tags][2].checked && [...visibleTags][2].checked)
+			{/* <p className="w-full text-center mt-4">Filter</p> */}
+			<div className="w-full flex flex-row justify-center my-10 gap-20">
+				<div className="bg-neutral-100 px-6 py-6 rounded-full border-neutral-200 border">
+					{visibleTags.map((tag, index) => (
+						<label>
+							<span
+								className={
+									tag.checked
+										? 'bg-white hover:cursor-pointer mx-1 px-6 py-4 drop-shadow-lg rounded-full hover:bg-gray-200 transition duration-300'
+										: 'font-sm hover:cursor-pointer mx-1 rounded-full px-6 py-4 hover:bg-neutral-300 duration-300 transition'
+								}
+							>
+								{tag.field}
+							</span>
+							<input
+								className="hidden"
+								key={index}
+								type="checkbox"
+								checked={tag.checked}
+								onChange={() => {
+									// console.log('filter checked')
+									updateVisibleTags(index, !tag.checked)
+									setVisiblePins(
+										pinsList.filter(
+											(pin) =>
+												([...pin.tags][0].checked && [...visibleTags][0].checked) ||
+												([...pin.tags][1].checked && [...visibleTags][1].checked) ||
+												([...pin.tags][2].checked && [...visibleTags][2].checked)
+										)
 									)
-								)
-								// console.log(pinsList)
-								// console.log(visiblePins)
-							}}
-						/>
-					</label>
+									// console.log(pinsList)
+									// console.log(visiblePins)
+								}}
+							/>
+						</label>
+					))}
 				</div>
-			))}
+			</div>
 
 			{/* Deprecated Popup */}
 			{/* <div className="popup">
@@ -400,60 +419,105 @@ const Map = () => {
 			</div> */}
 
 			{/* Chatbot */}
-			<Chatbot />
+			<div className="w-full text-center">
+				<Chatbot />
+			</div>
 
 			{/* Map */}
 			<Fragment>
 				{/* Put this into a new dialog box */}
 
 				{/* Popup */}
-				<div draggable="true" className={showPop ? 'popup active' : 'popup'}>
-					<div style={{ background: 'white' }}>
-						<form className="flex flex-col" onSubmit={addPin}>
-							<input value={eventTitle} type="text" placeholder="title" required onChange={(e) => setEventTitle(e.target.value)} />
-							<input value={eventHost} type="text" placeholder="host" required onChange={(e) => setEventHost(e.target.value)} />
-							<input value={eventStart} type="datetime-local" placeholder="start" required onChange={(e) => setEventStart(e.target.value)} />
-							<input value={eventEnd} type="datetime-local" placeholder="end" required onChange={(e) => setEventEnd(e.target.value)} />
-							<input value={eventAddress} type="text" placeholder="address" required onChange={(e) => setEventAddress(e.target.value)} />
-							<input value={eventCoordinates} type="text" placeholder="coordinates" required onChange={(e) => setEventCoordinates(e.target.value)} />
-							<input value={eventDescription} type="text" placeholder="description" required onChange={(e) => setEventDescription(e.target.value)} />
+				<div className={showPop ? 'popup active border-black border border-2' : 'popup'}>
+					<div>
+						<p className="text-center font-bold">Add Pin</p>
+						<form className="flex flex-col gap-2" onSubmit={addPin}>
+							<input className="px-2 py-1 rounded-full" value={eventTitle} type="text" placeholder="Event Title" required onChange={(e) => setEventTitle(e.target.value)} />
+							<input className="px-2 py-1 rounded-full" value={eventHost} type="text" placeholder="Hosting Organization" required onChange={(e) => setEventHost(e.target.value)} />
+							<input className="px-2 py-1 rounded-full" value={eventDescription} type="text" placeholder="Description" required onChange={(e) => setEventDescription(e.target.value)} />
 
-							{eventTags.map((tag, index) => (
-								<div key={tag.field}>
-									<label>
-										<span>{tag.field}</span>
-										<input key={index} type="checkbox" checked={tag.checked} onChange={() => updateTags(index, !tag.checked)} />
-									</label>
-								</div>
-							))}
-
-							<input type="submit" value="submit" />
+							<div className="flex flex-row w-full gap-2">
+								<input value={eventStart} type="datetime-local" placeholder="start" required onChange={(e) => setEventStart(e.target.value)} />
+								<input value={eventEnd} type="datetime-local" placeholder="end" required onChange={(e) => setEventEnd(e.target.value)} />
+							</div>
+							<input className="px-2 py-1 rounded-full" value={eventAddress} type="text" placeholder="Address" required onChange={(e) => setEventAddress(e.target.value)} />
+							<input className="px-2 py-1 rounded-full" value={eventCoordinates} type="text" placeholder="Coordinates" required onChange={(e) => setEventCoordinates(e.target.value)} />
+							<hr className="py-2" />
+							<p className="font-bold">Tags</p>
+							<div className="w-full ">
+								{eventTags.map((tag, index) => (
+									<div className="py-2 w-fit inline-block" key={tag.field}>
+										<label>
+											<span
+												className={
+													tag.checked
+														? 'border border-1  border-black hover:cursor-pointer mx-1 px-4 py-2 drop-shadow-lg rounded-full hover:bg-gray-200 transition duration-300'
+														: 'font-sm hover:cursor-pointer mx-1 rounded-full px-4 py-2 hover:bg-neutral-300 duration-300 transition'
+												}
+											>
+												{tag.field}
+											</span>
+											<input className="hidden" key={index} type="checkbox" checked={tag.checked} onChange={() => updateTags(index, !tag.checked)} />
+										</label>
+									</div>
+								))}
+							</div>
+							<input
+								className="w-full border mt-4 border-black border-1 px-6 py-2 rounded-full hover:cursor-pointer bg-green-100 transition duration-300 hover:bg-emerald-200"
+								type="submit"
+								value="Submit"
+							/>
 						</form>
 					</div>
 				</div>
-				<div className="div" style={{ position: 'absolute', top: '30%', width: '100%', height: '82vh' }}>
+				<div className="" style={{ position: 'absolute', top: '55%', width: '100%', height: '82vh' }}>
 					{/* Sidebar */}
 					<div className={showNav ? 'sidenav active' : 'sidenav'}>
 						<button style={{ position: 'absolute', zIndex: '2', right: '0px', top: '0px', padding: '20px' }} onClick={() => setShowNav(!showNav)}>
-							X
+							<IoIosCloseCircleOutline size={30} />
 						</button>
 						{selectedPin != null ? (
-							<div key={selectedPin.id}>
-								{isAuth && <button onClick={() => updateFavoritePins(userID, selectedPin.id)}>Favorite this pin</button>}
-								<h1> id: {selectedPin.id} </h1>
-								<h1> title: {selectedPin.title} </h1>
-								<p> host: {selectedPin.host} </p>
-								<p> start: {selectedPin.start} </p>
-								<p> end: {selectedPin.end} </p>
-								<p> address: {selectedPin.address} </p>
-								<p> coordinates: {selectedPin.coordinates} </p>
-								<p> description: {selectedPin.description} </p>
-								<p> tags: </p>
+							<div className="mt-20" key={selectedPin.id}>
+								{/* <h1> id: {selectedPin.id} </h1> */}
+								<div className="flex flex-row justify-between">
+									<p className="font-bold text-lg"> {selectedPin.title} </p>
+									{isAuth && (
+										<button onClick={() => updateFavoritePins(userID, selectedPin.id)}>
+											<GoStar size={25} />
+										</button>
+									)}
+								</div>
+								<p className="text-neutral-600 text-sm font-bold italic"> {selectedPin.host} </p>
+								<p> {selectedPin.description} </p>
+
+								<div className="mt-6">
+									<p> Start: {new Date(selectedPin.start).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short', hour12: true })} </p>
+									<p> End: {new Date(selectedPin.end).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short', hour12: true })} </p>
+									<p> {selectedPin.address} </p>
+								</div>
+								{/* <p> coordinates: {selectedPin.coordinates} </p> */}
+								<p className="font-bold mt-4">Tags </p>
 
 								{selectedPin.tags.map((tag, index) => (
-									<>{tag.checked && <p> - {tag.field} </p>}</>
+									<>
+										{tag.checked && (
+											<div className="border border-black w-fit px-4 py-2 my-2 rounded-full">
+												<p>{tag.field} </p>
+											</div>
+										)}
+									</>
 								))}
-								<button onClick={() => deletePin(selectedPin.id)}>Delete this pin</button>
+
+								<button
+									className="border border-black w-11/12 rounded-full bg-red-100 hover:bg-red-300 transition duration-300"
+									style={{ left: '50%', transform: 'translate(-50%,-50%)', position: 'absolute', bottom: '0px' }}
+									onClick={() => deletePin(selectedPin.id)}
+								>
+									<div className="flex flex-row justify-center items-center gap-4 py-4">
+										<p className="font-bold ">Delete this event</p>
+										<FaTrashAlt size={20} />
+									</div>
+								</button>
 
 								<br />
 								<br />
@@ -461,8 +525,13 @@ const Map = () => {
 						) : null}
 					</div>
 					{/* Add Pin BTN */}
-					<button style={{ position: 'absolute', zIndex: '2', right: '80px', top: '20px' }} onClick={() => setShowPop(!showPop)}>
-						ADD PIN
+					<button
+						className="p-2 bg-white border hover:bg-slate-100 transition duration-300 rounded-full border-black text-lg"
+						style={{ position: 'absolute', zIndex: '2', right: '80px', top: '20px' }}
+						onClick={() => setShowPop(!showPop)}
+					>
+						{/* ADD PIN */}
+						<HiOutlineLocationMarker size={35} />
 					</button>
 
 					<div style={{ width: '100%' }}>
