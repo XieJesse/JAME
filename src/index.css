@@ -55,31 +55,30 @@
 }
 
 .eventList {
-
 }
 
 .event {
-border-width: 2px;
+	border-width: 2px;
 }
 
 .eventtime {
-  display: table-cell;
-  width: 5.5rem;
-  font-size: 90%;
+	display: table-cell;
+	/* width: 6rem; */
+	/* font-size: 50%; */
 }
 
 .eventtitle {
-  display: table-cell;
-  color: #005A43;
+	display: table-cell;
+	color: #005a43;
 }
 
 .eventItem {
- height: 0px;
- overflow: hidden;
- border: #005A43;
- border-width: 2px;
+	height: 0px;
+	overflow: hidden;
+	border: #005a43;
+	border-width: 2px;
 }
 
 .eventItem.active {
-height: fit-content;
+	height: fit-content;
 }
