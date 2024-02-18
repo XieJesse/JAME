@@ -46,7 +46,7 @@ const Chatbot = () => {
 			name: 'Relevant Events Locator',
 			instructions:
 				"You are an assistant that locates and returns exactly one specific event found in JSON data provided to you that are catered towards a user's interests. Return exactly one event from the provided list, even if you can't find anything relevant-- do not give no for an answer and return an event. Don't say anything else to the user except what is in the following format, and ensure your response is something from the JSON data provided. Do not provide anything not found  in the JSON data. Format your response like this and convert all times to EST timezone: `Event name` hosted by `host`. `description`. `date` and `time` at `address`. Here is the JSON data: " +
-				JSON.stringify(pinsList),
+				JSON.stringify(pinsList, 32000),
 			model: 'gpt-4-turbo-preview',
 		})
 
@@ -97,6 +97,7 @@ const Chatbot = () => {
 		const recentMessage = messageList.data.filter((message) => message.run_id === run.id && message.role === 'assistant').pop()
 
 		setLastMessage(recentMessage.content[0]['text'].value)
+		alert(lastMessage)
 	}
 
 	return (
@@ -107,11 +108,13 @@ const Chatbot = () => {
 			</form>
 			{/* {messages.length > 0 && messages[messages.length - 1].isUser == false ? <p>{messages[messages.length - 1].content}</p> : null} */}
 			{isWaiting ? <BeatLoader /> : null}
-			{lastMessage != '' ? (
-				<div className="px-2 py-4 rounded-full border border-black w-1/2">
-					<p>{lastMessage}</p>{' '}
+			{/* {lastMessage != '' ? (
+				<div className="w-full flex flex-row justify-center">
+					<div className="px-2 py-4 rounded-full border border-black w-1/2 text-center">
+						<p className="text-center">{lastMessage}</p>{' '}
+					</div>
 				</div>
-			) : null}
+			) : null} */}
 		</div>
 	)
 }

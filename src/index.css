@@ -21,13 +21,16 @@
 }  */
 
 .sidenav {
-	width: 400px;
+	width: 425px;
 	background: white;
 	position: absolute;
 	height: 95vh;
-	padding: 0 30px;
+	padding: 0 40px;
 	left: -100%;
 	transition: all 1s;
+	border-right: 1px;
+	border-right: 2px solid;
+	border-color: rgb(205, 205, 205);
 }
 
 .sidenav.active {
