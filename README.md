@@ -1,3 +1,5 @@
+## Team JAME - Jesse Xie, Anthony Qiu, Matthew Tang, Edwin Zheng
+
 ## Inspiration
 As Binghamton students, we need time to relax and socialize after a week of hard work. That’s why we wanted to create a user-friendly application that is easy to use, allowing students to both find events and schedule them. In addition, clubs can post their own events, to make hosting them for their targeted audience easier. Users can also use the application to find professional events that are being hosted.
 
