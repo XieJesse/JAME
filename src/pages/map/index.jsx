@@ -61,7 +61,7 @@ const Map = () => {
 	}
 
 	const [pinsList, setPinsList] = useState([])
-	const [visiblePins, setVisiblePins] = useState(pinsList)
+	const [visiblePins, setVisiblePins] = useState([])
 
 	const pinCollection = collection(db, 'pins')
 
@@ -74,14 +74,21 @@ const Map = () => {
 	const getPins = async () => {
 		try {
 			const pins = await getDocs(pinCollection)
+
 			setPinsList(
 				pins.docs.map((doc) => ({
 					id: doc.id,
 					...doc.data(),
 				}))
 			)
-			console.log(pinsList)
-
+			// console.log(pinsList)
+			setVisiblePins(
+				pins.docs.map((doc) => ({
+					id: doc.id,
+					...doc.data(),
+				}))
+			)
+			console.log(visiblePins)
 			// console.log("dasdad") ;
 			// update pins list from database
 		} catch (error) {
@@ -149,7 +156,6 @@ const Map = () => {
 			// 		tags: eventTags,
 			// 	},
 			// ])
-			setVisiblePins(pinsList)
 		} catch (error) {
 			console.log(error)
 		}
@@ -203,7 +209,6 @@ const Map = () => {
 	useEffect(() => {
 		getPins()
 		getFavoritePins(userID)
-		setVisiblePins(pinsList)
 		// console.log(userID)
 		// console.log("selected date: " + selectedDate.toLocaleString("en-GB").substring(6,10)+"-"+selectedDate.toLocaleString("en-GB").substring(3,5)+"-"+selectedDate.toLocaleString("en-GB").substring(0,2))
 	}, [])
@@ -223,11 +228,11 @@ const Map = () => {
 		//}
 		//setActiveMarker(marker)
 		setSelectedPin(marker)
-		console.log(marker)
+		// console.log(marker)
 		// this is the same as the id of the document, so it is possible to send another get request
 		const pin = getPin(marker)
 		setSelectedPin(pin)
-		console.log(pin)
+		// console.log(pin)
 	}
 
 	// const [clickMarkers, setClickMarkers] = useState([]);
@@ -273,7 +278,7 @@ const Map = () => {
 	return (
 		<div>
 			{/* <div>
-				{pinsList.map(
+				{visiblePins.map(
 					(pin) =>
 						selectedDate.getTime() >= new Date(pin.start).getTime() &&
 						selectedDate.getTime() <= new Date(pin.end).getTime() && (
@@ -286,6 +291,7 @@ const Map = () => {
 				)}
 			</div> */}
 
+			{/* Filters */}
 			<p className="mt-100">a</p>
 			{visibleTags.map((tag, index) => (
 				<div className="z-20" key={tag.field}>
@@ -306,8 +312,8 @@ const Map = () => {
 											([...pin.tags][2].checked && [...visibleTags][2].checked)
 									)
 								)
-								console.log(pinsList)
-								console.log(visiblePins)
+								// console.log(pinsList)
+								// console.log(visiblePins)
 							}}
 						/>
 					</label>
@@ -360,11 +366,11 @@ const Map = () => {
 				/>
 			</div>
 			<br />
-			{/* Filters */}
 
 			<br />
-			{/* Won't be needing this, this generates a list of all the events like b-engaged does. maybe we can take this out into its own page */}
-			<div className="popup">
+
+			{/* Deprecated Popup */}
+			{/* <div className="popup">
 				{visiblePins.map(
 					(pin) =>
 						selectedDate.getTime() >= new Date(pin.start).getTime() &&
@@ -391,11 +397,13 @@ const Map = () => {
 							</div>
 						)
 				)}
-			</div>
+			</div> */}
 
 			{/* Map */}
 			<Fragment>
 				{/* Put this into a new dialog box */}
+
+				{/* Popup */}
 				<div draggable="true" className={showPop ? 'popup active' : 'popup'}>
 					<div style={{ background: 'white' }}>
 						<form className="flex flex-col" onSubmit={addPin}>
@@ -420,7 +428,7 @@ const Map = () => {
 						</form>
 					</div>
 				</div>
-				<div className="div" style={{ position: 'absolute', top: '18%', width: '100%', height: '82vh' }}>
+				<div className="div" style={{ position: 'absolute', top: '25%', width: '100%', height: '82vh' }}>
 					{/* Sidebar */}
 					<div className={showNav ? 'sidenav active' : 'sidenav'}>
 						<button style={{ position: 'absolute', zIndex: '2', right: '0px', top: '0px', padding: '20px' }} onClick={() => setShowNav(!showNav)}>
