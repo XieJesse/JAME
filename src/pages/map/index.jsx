@@ -4,8 +4,8 @@ import { db, auth } from '../../config/firebase'
 import { getDocs, getDoc, collection, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore'
 
 const Map = () => {
-
-  const [selectedTime, setSelectedTime] = useState(new Date().getDate()) ;
+  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [selectedTime, setSelectedTime] = useState(new Date().getHours()*60+new Date().getMinutes()) ;
 
   const [eventTitle, setEventTitle] = useState("") ;
   const [eventHost, setEventHost] = useState("") ;
@@ -53,7 +53,7 @@ const Map = () => {
         ...doc.data(),
       })))
       console.log(pinsList) ;
-      console.log("dasdad") ;
+      // console.log("dasdad") ;
       // update pins list from database
     } catch (error) {
       console.log(error) ;
@@ -103,14 +103,43 @@ const Map = () => {
 
   useEffect(() => {
     getPins()
-    console.log(selectedTime)
+    // console.log("selected date: " + selectedDate.toLocaleString("en-GB").substring(6,10)+"-"+selectedDate.toLocaleString("en-GB").substring(3,5)+"-"+selectedDate.toLocaleString("en-GB").substring(0,2))
   }, []) ;
 
   return (
     <div>
-      
+      <div class="slidecontainer">
+        <input type="range" style={{width: "570px"}} min="0" max="1439" value={selectedTime} onChange={(e) => {
+          setSelectedTime(e.target.value);
+          setSelectedDate(new Date((new Date(selectedDate.setMinutes(selectedTime % 60)).setHours(parseInt(selectedTime / 60))))) ;
+          // console.log(selectedDate.toLocaleString("en-GB").substring(6,10)+"-"+selectedDate.toLocaleString("en-GB").substring(3,5)+"-"+selectedDate.toLocaleString("en-GB").substring(0,2))
+        }}/>
+        {(parseInt(selectedTime / 60)) == 0 &&
+          <p> Selected Time: 12:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} AM</p>
+        }
+        {(parseInt(selectedTime / 60)) < 12 && (parseInt(selectedTime / 60)) > 0 &&
+          <p> Selected Time: {(parseInt(selectedTime / 60))}:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} AM</p>
+        }
+        {(parseInt(selectedTime / 60)) == 12 &&
+          <p> Selected Time: 12:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} PM</p>
+        }
+        {(parseInt(selectedTime / 60)) > 12 &&
+          <p> Selected Time: {(parseInt(selectedTime / 60) % 12)}:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} PM</p>
+        }
+      </div>
+      <div class="calendarcontainer">
+        <input type="date" id="start" name="start" value={selectedDate.toLocaleString("en-GB").substring(6,10)+"-"+selectedDate.toLocaleString("en-GB").substring(3,5)+"-"+selectedDate.toLocaleString("en-GB").substring(0,2)} min="2024-01-01" max="2024-12-31" onChange={(e) => {
+          const a = new Date(e.target.value) ;
+          a.setDate(a.getDate()+1) ;
+          setSelectedDate(new Date(a)) ;
+          console.log(e.target.value) ;
+        }
+        }/>
+      </div>
+      <br/>
       <div>
         {pinsList.map((pin) => (
+          selectedDate.getTime() >= new Date(pin.start).getTime() && selectedDate.getTime() <= new Date(pin.end).getTime() &&
           <div key={pin.id}>
             <h1> title: {pin.title} </h1>
               <p> host: {pin.host} </p>
@@ -133,6 +162,7 @@ const Map = () => {
               <br/>
               <br/>
           </div>
+
         ))}
       </div>
       <form className="flex flex-col" onSubmit={addPin}>
