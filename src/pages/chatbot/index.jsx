@@ -118,11 +118,11 @@ const Chatbot = () => {
 		<div className="w-full z-[9]">
 			<form onSubmit={handleSendMessage} className="w-full">
 				{isWaiting ? (
-					<div className="p-4 w-full rounded-full border border-black bg-white overflow-x-auto h-20">
+					<div className="p-4 w-full rounded-full border border-black bg-white overflow-x-auto h-14">
 						<BeatLoader />
 					</div>
 				) : (
-					<div className="p-4 w-full rounded-full border border-black bg-white overflow-x-auto h-20 no-scrollbar">
+					<div className="p-4 w-full rounded-full border border-black bg-white overflow-x-auto h-14 no-scrollbar">
 						{lastMessage !== '' ? (
 							<div className="flex flex-row mr-8">
 								<p>{lastMessage}</p>

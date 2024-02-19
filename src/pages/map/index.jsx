@@ -355,15 +355,15 @@ const Map = () => {
 
 			{/* Filters */}
 			{/* <p className="w-full text-center mt-4">Filter</p> */}
-			<div className="w-full flex flex-row justify-center top-1/4 gap-20 absolute mx-auto left-0 right-0 z-[9] hidden">
-				<div className="bg-neutral-100 px-6 py-6 rounded-full border-neutral-200 border">
+			<div className="w-fit top-[18%] gap-20 absolute mx-auto left-0 right-0 z-[9]">
+				<div className="bg-transparent  px-6 py-3 rounded-full  w-full">
 					{visibleTags.map((tag, index) => (
 						<label>
 							<span
 								className={
 									tag.checked
-										? 'bg-white hover:cursor-pointer mx-1 px-6 py-4 drop-shadow-lg rounded-full hover:bg-gray-200 transition duration-300'
-										: 'font-sm hover:cursor-pointer mx-1 rounded-full px-6 py-4 hover:bg-neutral-300 duration-300 transition'
+										? 'hover:cursor-pointer mx-1 px-4 py-2 drop-shadow-lg rounded-full bg-blue-100 transition hover:bg-neutral-200 font-medium duration-300 shadow-xl border-neutral-200'
+										: 'font-sm hover:cursor-pointer mx-1 rounded-full px-4 py-2 bg-neutral-300 text-neutral-500 hover:bg-blue-100 duration-300 transition'
 								}
 							>
 								{tag.field}
