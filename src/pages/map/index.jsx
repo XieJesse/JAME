@@ -304,7 +304,7 @@ const Map = () => {
 			</div> */}
 
 			{/* Slider keep this */}
-			<div className="w-1/3 bg-white p-4 px-6 mt-4 rounded-full border-neutral-200 border border-2 absolute mx-auto left-0 right-0 z-[9]">
+			<div className="w-1/3 bg-white p-4 px-6 top-28 rounded-full border-neutral-200 border border-2 absolute mx-auto left-0 right-0 z-[9]">
 				<div
 					className="slidecontainer w-full flex flex-row gap-4 justify-center align-center items-center"
 					// style={{ background: '#206e3c' }}
@@ -355,8 +355,8 @@ const Map = () => {
 
 			{/* Filters */}
 			{/* <p className="w-full text-center mt-4">Filter</p> */}
-			<div className="w-fit top-[18%] gap-20 absolute mx-auto left-0 right-0 z-[9]">
-				<div className="bg-transparent px-6 py-3 rounded-full  w-full">
+			<div className="w-1/3 top-44 absolute mx-auto left-0 right-0 z-[9]">
+				<div className="bg-transparent px-6 py-3 rounded-full w-full flex flex-row justify-center">
 					{visibleTags.map((tag, index) => (
 						<label>
 							<span
@@ -425,7 +425,7 @@ const Map = () => {
 				</div> */}
 
 			{/* Chatbot */}
-			<div className="w-1/3 text-center absolute left-0 right-0 mx-auto bottom-20 z-[9]">
+			<div className="w-1/3 text-center absolute left-0 right-0 mx-auto bottom-16 z-[9]">
 				<Chatbot />
 			</div>
 
@@ -434,7 +434,7 @@ const Map = () => {
 				{/* Put this into a new dialog box */}
 
 				{/* Popup */}
-				<div className={showPop ? 'popup active border-black border border-2' : 'popup'}>
+				<div className={showPop ? 'popup active border-black border border-2 overflow-y-scroll no-scrollbar ' : 'popup '}>
 					<div>
 						<p className="text-center font-bold">Add Pin</p>
 						<form className="flex flex-col gap-2" onSubmit={addPin}>
@@ -483,7 +483,7 @@ const Map = () => {
 							<IoIosCloseCircleOutline size={30} />
 						</button>
 						{selectedPin != null ? (
-							<div className="mt-20" key={selectedPin.id}>
+							<div className="mt-8 md:mt-12" key={selectedPin.id}>
 								{/* <h1> id: {selectedPin.id} </h1> */}
 								<div className="flex flex-row justify-between">
 									<p className="font-bold text-lg"> {selectedPin.title} </p>
