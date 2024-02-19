@@ -61,7 +61,7 @@ const Chatbot = () => {
 		const assistant = await openai.beta.assistants.create({
 			name: 'Relevant Events Locator',
 			instructions: inst,
-			model: 'gpt-4-turbo-preview',
+			model: 'gpt-3.5-turbo-1106',
 		})
 
 		const thread = await openai.beta.threads.create()
@@ -116,9 +116,9 @@ const Chatbot = () => {
 
 	return (
 		<div className="w-full z-[9]">
-			<form onSubmit={handleSendMessage} className="w-full">
+			<form onSubmit={handleSendMessage} className="w-full no-scrollbar">
 				{isWaiting ? (
-					<div className="p-4 w-full rounded-full border border-black bg-white overflow-x-auto h-14">
+					<div className="p-2 w-full rounded-full border border-black bg-white overflow-x-auto h-14 no-scrollbar">
 						<BeatLoader />
 					</div>
 				) : (

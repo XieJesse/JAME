@@ -21,11 +21,11 @@
 }  */
 
 .sidenav {
-	width: 425px;
+	width: 22%;
 	background: white;
 	position: absolute;
 	height: 91%;
-	padding: 0 40px;
+	padding: 0 2rem;
 	left: -100%;
 	transition: all 1s;
 	border-right: 1px;
@@ -39,17 +39,17 @@
 }
 
 .popup {
-	width: 400px;
+	width: 21%;
 	background: white;
 	position: absolute;
-	height: 525px;
-	padding: 30px;
+	height: 57%;
+	padding: 2rem;
 	transition: all 0.5s;
 	top: 50%;
 	left: 85%;
 	transform: translate(-50%, -50%);
 	z-index: -2;
-	border-radius: 20px;
+	border-radius: 1.25rem;
 	overflow: hidden;
 }
 

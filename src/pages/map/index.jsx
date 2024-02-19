@@ -356,7 +356,7 @@ const Map = () => {
 			{/* Filters */}
 			{/* <p className="w-full text-center mt-4">Filter</p> */}
 			<div className="w-fit top-[18%] gap-20 absolute mx-auto left-0 right-0 z-[9]">
-				<div className="bg-transparent  px-6 py-3 rounded-full  w-full">
+				<div className="bg-transparent px-6 py-3 rounded-full  w-full">
 					{visibleTags.map((tag, index) => (
 						<label>
 							<span
@@ -479,7 +479,7 @@ const Map = () => {
 				<div className="" style={{ width: '100%', height: '80vh' }}>
 					{/* Sidebar */}
 					<div className={showNav ? 'sidenav active' : 'sidenav'}>
-						<button style={{ position: 'absolute', zIndex: '4', right: '0px', top: '0px', padding: '20px' }} onClick={() => setShowNav(!showNav)}>
+						<button style={{ position: 'absolute', zIndex: '4', right: '0px', top: '0px', padding: '1rem' }} onClick={() => setShowNav(!showNav)}>
 							<IoIosCloseCircleOutline size={30} />
 						</button>
 						{selectedPin != null ? (
@@ -533,7 +533,7 @@ const Map = () => {
 					{/* Add Pin BTN */}
 					<button
 						className="p-2 bg-white border hover:bg-slate-100 transition duration-300 rounded-full border-black text-lg"
-						style={{ position: 'absolute', zIndex: '10', right: '80px', top: '110px' }}
+						style={{ position: 'absolute', zIndex: '10', right: '5rem', top: '7rem' }}
 						onClick={() => setShowPop(!showPop)}
 					>
 						{/* ADD PIN */}
