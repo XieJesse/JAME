@@ -34,7 +34,6 @@ const Layout = () => {
 				</div>
 			</div>
 			<hr className="drop-shadow-md"></hr>
-			<br></br>
 
 			<Outlet />
 		</div>

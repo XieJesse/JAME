@@ -4,6 +4,7 @@ import { db } from '../../config/firebase'
 import { getDocs, getDoc, collection, addDoc, deleteDoc, doc, updateDoc, setDoc } from 'firebase/firestore'
 import OpenAI from 'openai'
 import { BeatLoader } from 'react-spinners'
+import { FaRedoAlt } from 'react-icons/fa'
 
 const Chatbot = () => {
 	const pinCollection = collection(db, 'pins')
@@ -14,8 +15,10 @@ const Chatbot = () => {
 			const pins = await getDocs(pinCollection)
 			setPinsList(
 				pins.docs.map((doc) => ({
-					id: doc.id,
-					...doc.data(),
+					// id: doc.id,
+					// ...doc.data(),
+					title: doc.data().title,
+					description: doc.data().description,
 				}))
 			)
 		} catch (error) {
@@ -33,8 +36,12 @@ const Chatbot = () => {
 
 	useEffect(() => {
 		getPins()
-		initChatBot()
+		// initChatBot()
 	}, [])
+
+	// function timeout(delay) {
+	// 	return new Promise( res => setTimeout(res, delay) );
+	// }
 
 	const initChatBot = async () => {
 		const openai = new OpenAI({
@@ -42,11 +49,18 @@ const Chatbot = () => {
 			dangerouslyAllowBrowser: true,
 		})
 
+		// console.log(pinsList)
+		// const filteredData = pinsList.map(({ title, description, address, start, end }) => ({ title, description, address, start, end }));
+		// console.log(JSON.stringify(filteredData))
+		// await timeout(2000)
+		const inst =
+			"You are an assistant that locates and returns exactly one specific event found in JSON data provided to you that are catered towards a user's interests. Don't say anything else to the user except what is in the following format, and ensure your response is something from the JSON data provided. Do not provide anything not found  in the JSON data. Format your response like this and convert all times to EST timezone: `Event name`, `description`, `date` and `time` at `address`. Pick an event from the following the JSON data that I am attaching as a string: " +
+			JSON.stringify(pinsList)
+
+		console.log(inst)
 		const assistant = await openai.beta.assistants.create({
 			name: 'Relevant Events Locator',
-			instructions:
-				"You are an assistant that locates and returns exactly one specific event found in JSON data provided to you that are catered towards a user's interests. Return exactly one event from the provided list, even if you can't find anything relevant-- do not give no for an answer and return an event. Don't say anything else to the user except what is in the following format, and ensure your response is something from the JSON data provided. Do not provide anything not found  in the JSON data. Format your response like this and convert all times to EST timezone: `Event name` hosted by `host`. `description`. `date` and `time` at `address`. Here is the JSON data: " +
-				JSON.stringify(pinsList, 32000),
+			instructions: inst,
 			model: 'gpt-4-turbo-preview',
 		})
 
@@ -64,7 +78,7 @@ const Chatbot = () => {
 
 	const handleSendMessage = async (e) => {
 		e.preventDefault()
-		getPins()
+		// getPins()
 
 		messages.push(createNewMessage(input, true))
 		setMessages([...messages])
@@ -97,19 +111,42 @@ const Chatbot = () => {
 		const recentMessage = messageList.data.filter((message) => message.run_id === run.id && message.role === 'assistant').pop()
 
 		setLastMessage(recentMessage.content[0]['text'].value)
-		alert(lastMessage)
+		// alert(recentMessage.content[0]['text'].value)
 	}
 
 	return (
-		<div>
-			<form onSubmit={handleSendMessage}>
-				<input className="p-4 rounded-full border border-black" type="text" value={input} placeholder="✨ Smart Search" onChange={(e) => setInput(e.target.value)}></input>
-				<input type="submit" className="hidden" />
+		<div className="w-full z-[9]">
+			<form onSubmit={handleSendMessage} className="w-full">
+				{isWaiting ? (
+					<div className="p-4 w-full rounded-full border border-black bg-white overflow-x-auto h-20">
+						<BeatLoader />
+					</div>
+				) : (
+					<div className="p-4 w-full rounded-full border border-black bg-white overflow-x-auto h-20 no-scrollbar">
+						{lastMessage !== '' ? (
+							<div className="flex flex-row mr-8">
+								<p>{lastMessage}</p>
+								<button className="absolute right-0 my-4 mx-8" onClick={() => setLastMessage('')}>
+									<FaRedoAlt />
+								</button>
+							</div>
+						) : (
+							<input
+								className="w-full h-full border-transparent focus:outline-none focus:border-transparent focus:ring-0"
+								type="text"
+								value={input}
+								placeholder="✨ Smart Search"
+								onChange={(e) => setInput(e.target.value)}
+							/>
+						)}
+					</div>
+				)}
+
+				<input type="submit" className="hidden cursor-pointer" />
 			</form>
 			{/* {messages.length > 0 && messages[messages.length - 1].isUser == false ? <p>{messages[messages.length - 1].content}</p> : null} */}
-			{isWaiting ? <BeatLoader /> : null}
 			{/* {lastMessage != '' ? (
-				<div className="w-full flex flex-row justify-center">
+				<div className="w-full flex flex-row justify-center bg-white">
 					<div className="px-2 py-4 rounded-full border border-black w-1/2 text-center">
 						<p className="text-center">{lastMessage}</p>{' '}
 					</div>

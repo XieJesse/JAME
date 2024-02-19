@@ -24,7 +24,7 @@
 	width: 425px;
 	background: white;
 	position: absolute;
-	height: 95vh;
+	height: 91%;
 	padding: 0 40px;
 	left: -100%;
 	transition: all 1s;
@@ -45,8 +45,8 @@
 	height: 525px;
 	padding: 30px;
 	transition: all 0.5s;
-	top: 100%;
-	left: 75%;
+	top: 50%;
+	left: 85%;
 	transform: translate(-50%, -50%);
 	z-index: -2;
 	border-radius: 20px;
@@ -54,7 +54,7 @@
 }
 
 .popup.active {
-	z-index: 2;
+	z-index: 5;
 }
 
 .eventList {
@@ -84,4 +84,14 @@
 
 .eventItem.active {
 	height: fit-content;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }

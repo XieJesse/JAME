@@ -47,8 +47,8 @@ const Map = () => {
 
 	const [visibleTags, setVisibleTags] = useState([
 		{
-		  field: 'Favorites',
-		  checked: false,
+			field: 'Favorites',
+			checked: false,
 		},
 		{
 			field: 'Club Meeting',
@@ -304,57 +304,58 @@ const Map = () => {
 			</div> */}
 
 			{/* Slider keep this */}
-			<div
-				className="slidecontainer w-full flex flex-col justify-center align-center items-center"
-				// style={{ background: '#206e3c' }}
-			>
-				<input
-					type="range"
-					className="w-1/2 text-center h-12"
-					min="0"
-					max="1439"
-					value={selectedTime}
-					onChange={(e) => {
-						setSelectedTime(e.target.value)
-						setSelectedDate(new Date(new Date(selectedDate.setMinutes(selectedTime % 60)).setHours(parseInt(selectedTime / 60))))
-						// console.log(selectedDate.toLocaleString("en-GB").substring(6,10)+"-"+selectedDate.toLocaleString("en-GB").substring(3,5)+"-"+selectedDate.toLocaleString("en-GB").substring(0,2))
-					}}
-				/>
-				{parseInt(selectedTime / 60) == 0 && <p> 12:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} AM</p>}
-				{parseInt(selectedTime / 60) < 12 && parseInt(selectedTime / 60) > 0 && (
-					<p>
-						{' '}
-						{parseInt(selectedTime / 60)}:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} AM
-					</p>
-				)}
-				{parseInt(selectedTime / 60) == 12 && <p> 12:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} PM</p>}
-				{parseInt(selectedTime / 60) > 12 && (
-					<p>
-						{' '}
-						{parseInt(selectedTime / 60) % 12}:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} PM
-					</p>
-				)}
-			</div>
-			<div className="calendarcontainer w-full flex flex-col justify-center align-center items-center">
-				<input
-					type="date"
-					id="start"
-					name="start"
-					value={selectedDate.toLocaleString('en-GB').substring(6, 10) + '-' + selectedDate.toLocaleString('en-GB').substring(3, 5) + '-' + selectedDate.toLocaleString('en-GB').substring(0, 2)}
-					min="2024-01-01"
-					max="2024-12-31"
-					onChange={(e) => {
-						const a = new Date(e.target.value)
-						a.setDate(a.getDate() + 1)
-						setSelectedDate(new Date(a))
-						console.log(e.target.value)
-					}}
-				/>
+			<div className="w-1/3 bg-white p-4 px-6 mt-4 rounded-full border-neutral-200 border border-2 absolute mx-auto left-0 right-0 z-[9]">
+				<div
+					className="slidecontainer w-full flex flex-row gap-4 justify-center align-center items-center"
+					// style={{ background: '#206e3c' }}
+				>
+					{parseInt(selectedTime / 60) == 0 && <p className="font-bold"> 12:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} AM</p>}
+					{parseInt(selectedTime / 60) < 12 && parseInt(selectedTime / 60) > 0 && (
+						<p className="font-bold">
+							{' '}
+							{parseInt(selectedTime / 60)}:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} AM
+						</p>
+					)}
+					{parseInt(selectedTime / 60) == 12 && <p className="font-bold"> 12:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} PM</p>}
+					{parseInt(selectedTime / 60) > 12 && (
+						<p className="font-bold">
+							{' '}
+							{parseInt(selectedTime / 60) % 12}:{selectedTime % 60 <= 9 ? <span>0{selectedTime % 60}</span> : <span>{selectedTime % 60}</span>} PM
+						</p>
+					)}
+					<input
+						type="range"
+						className="w-full text-center h-12"
+						min="0"
+						max="1439"
+						value={selectedTime}
+						onChange={(e) => {
+							setSelectedTime(e.target.value)
+							setSelectedDate(new Date(new Date(selectedDate.setMinutes(selectedTime % 60)).setHours(parseInt(selectedTime / 60))))
+							// console.log(selectedDate.toLocaleString("en-GB").substring(6,10)+"-"+selectedDate.toLocaleString("en-GB").substring(3,5)+"-"+selectedDate.toLocaleString("en-GB").substring(0,2))
+						}}
+					/>
+
+					<input
+						type="date"
+						id="start"
+						name="start"
+						value={selectedDate.toLocaleString('en-GB').substring(6, 10) + '-' + selectedDate.toLocaleString('en-GB').substring(3, 5) + '-' + selectedDate.toLocaleString('en-GB').substring(0, 2)}
+						min="2024-01-01"
+						max="2024-12-31"
+						onChange={(e) => {
+							const a = new Date(e.target.value)
+							a.setDate(a.getDate() + 1)
+							setSelectedDate(new Date(a))
+							console.log(e.target.value)
+						}}
+					/>
+				</div>
 			</div>
 
 			{/* Filters */}
 			{/* <p className="w-full text-center mt-4">Filter</p> */}
-			<div className="w-full flex flex-row justify-center my-10 gap-20">
+			<div className="w-full flex flex-row justify-center top-1/4 gap-20 absolute mx-auto left-0 right-0 z-[9] hidden">
 				<div className="bg-neutral-100 px-6 py-6 rounded-full border-neutral-200 border">
 					{visibleTags.map((tag, index) => (
 						<label>
@@ -376,14 +377,13 @@ const Map = () => {
 									// console.log('filter checked')
 									updateVisibleTags(index, !tag.checked)
 									setVisiblePins(
-									  pinsList.filter(
-									    (pin) =>(
-									      (([...pin.tags][0].checked && [...visibleTags][1].checked) ||
-									      ([...pin.tags][1].checked && [...visibleTags][2].checked) ||
-									      ([...pin.tags][2].checked && [...visibleTags][3].checked)) &&
-									      ([...visibleTags][0].checked ? (favoritePins.toString().indexOf(pin.id) > -1) : true
-									    ))
-									  )
+										pinsList.filter(
+											(pin) =>
+												(([...pin.tags][0].checked && [...visibleTags][1].checked) ||
+													([...pin.tags][1].checked && [...visibleTags][2].checked) ||
+													([...pin.tags][2].checked && [...visibleTags][3].checked)) &&
+												([...visibleTags][0].checked ? favoritePins.toString().indexOf(pin.id) > -1 : true)
+										)
 									)
 									// console.log(pinsList)
 									// console.log(visiblePins)
@@ -396,36 +396,36 @@ const Map = () => {
 
 			{/* Deprecated Popup */}
 			{/* <div className="popup">
-				{visiblePins.map(
-					(pin) =>
-						selectedDate.getTime() >= new Date(pin.start).getTime() &&
-						selectedDate.getTime() <= new Date(pin.end).getTime() && (
-							<div key={pin.id}>
-								{isAuth && <button onClick={() => updateFavoritePins(userID, pin.id)}>Favorite this pin</button>}
-								<h1> id: {pin.id} </h1>
-								<h1> title: {pin.title} </h1>
-								<p> host: {pin.host} </p>
-								<p> start: {pin.start} </p>
-								<p> end: {pin.end} </p>
-								<p> address: {pin.address} </p>
-								<p> coordinates: {pin.coordinates} </p>
-								<p> description: {pin.description} </p>
-								<p> tags: </p>
-
-								{pin.tags.map((tag, index) => (
-									<>{tag.checked && <p> - {tag.field} </p>}</>
-								))}
-								<button onClick={() => deletePin(pin.id)}>Delete this pin</button>
-
-								<br />
-								<br />
-							</div>
-						)
-				)}
-			</div> */}
+					{visiblePins.map(
+						(pin) =>
+							selectedDate.getTime() >= new Date(pin.start).getTime() &&
+							selectedDate.getTime() <= new Date(pin.end).getTime() && (
+								<div key={pin.id}>
+									{isAuth && <button onClick={() => updateFavoritePins(userID, pin.id)}>Favorite this pin</button>}
+									<h1> id: {pin.id} </h1>
+									<h1> title: {pin.title} </h1>
+									<p> host: {pin.host} </p>
+									<p> start: {pin.start} </p>
+									<p> end: {pin.end} </p>
+									<p> address: {pin.address} </p>
+									<p> coordinates: {pin.coordinates} </p>
+									<p> description: {pin.description} </p>
+									<p> tags: </p>
+	
+									{pin.tags.map((tag, index) => (
+										<>{tag.checked && <p> - {tag.field} </p>}</>
+									))}
+									<button onClick={() => deletePin(pin.id)}>Delete this pin</button>
+	
+									<br />
+									<br />
+								</div>
+							)
+					)}
+				</div> */}
 
 			{/* Chatbot */}
-			<div className="w-full text-center">
+			<div className="w-1/3 text-center absolute left-0 right-0 mx-auto bottom-20 z-[9]">
 				<Chatbot />
 			</div>
 
@@ -476,10 +476,10 @@ const Map = () => {
 						</form>
 					</div>
 				</div>
-				<div className="" style={{ position: 'absolute', top: '55%', width: '100%', height: '82vh' }}>
+				<div className="" style={{ width: '100%', height: '80vh' }}>
 					{/* Sidebar */}
 					<div className={showNav ? 'sidenav active' : 'sidenav'}>
-						<button style={{ position: 'absolute', zIndex: '2', right: '0px', top: '0px', padding: '20px' }} onClick={() => setShowNav(!showNav)}>
+						<button style={{ position: 'absolute', zIndex: '4', right: '0px', top: '0px', padding: '20px' }} onClick={() => setShowNav(!showNav)}>
 							<IoIosCloseCircleOutline size={30} />
 						</button>
 						{selectedPin != null ? (
@@ -533,7 +533,7 @@ const Map = () => {
 					{/* Add Pin BTN */}
 					<button
 						className="p-2 bg-white border hover:bg-slate-100 transition duration-300 rounded-full border-black text-lg"
-						style={{ position: 'absolute', zIndex: '2', right: '80px', top: '20px' }}
+						style={{ position: 'absolute', zIndex: '10', right: '80px', top: '110px' }}
 						onClick={() => setShowPop(!showPop)}
 					>
 						{/* ADD PIN */}
@@ -542,7 +542,7 @@ const Map = () => {
 
 					<div style={{ width: '100%' }}>
 						{isLoaded ? (
-							<GoogleMap center={{ lat: 42.088565, lng: -75.968623 }} zoom={16.5} onClick={onMapClick} mapContainerStyle={{ width: '100%', height: '90vh' }}>
+							<GoogleMap center={{ lat: 42.088565, lng: -75.968623 }} zoom={16.5} onClick={onMapClick} mapContainerStyle={{ width: '100%', height: '91vh' }}>
 								{visiblePins.map(
 									({ id, host, coordinates, description, start, end }) =>
 										selectedDate.getTime() >= new Date(start).getTime() &&
