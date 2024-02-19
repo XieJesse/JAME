@@ -359,7 +359,7 @@ const Map = () => {
 				<div className="bg-transparent px-6 py-3 rounded-full w-full flex flex-row justify-center">
 					{visibleTags.map((tag, index) => (
 						<label>
-							<span
+							<p
 								className={
 									tag.checked
 										? 'hover:cursor-pointer mx-1 px-4 py-2 drop-shadow-lg rounded-full bg-blue-100 transition hover:bg-neutral-200 font-medium duration-300 shadow-xl border-neutral-200'
@@ -367,7 +367,7 @@ const Map = () => {
 								}
 							>
 								{tag.field}
-							</span>
+							</p>
 							<input
 								className="hidden"
 								key={index}
